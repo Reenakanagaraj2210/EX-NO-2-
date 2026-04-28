@@ -36,8 +36,147 @@ STEP-5: Display the obtained cipher text.
 
 Program:
 
+```
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 
+char matrix[5][5];
+
+void generateMatrix(char key[])
+{
+    int used[26] = {0};
+    int i, j, k = 0;
+
+    used['J'-'A'] = 1; // I and J treated same
+
+    for(i = 0; key[i] != '\0'; i++)
+    {
+        char ch = toupper(key[i]);
+        if(ch == 'J') ch = 'I';
+
+        if(ch >= 'A' && ch <= 'Z' && !used[ch-'A'])
+        {
+            matrix[k/5][k%5] = ch;
+            used[ch-'A'] = 1;
+            k++;
+        }
+    }
+
+    for(i=0;i<26;i++)
+    {
+        if(!used[i])
+        {
+            matrix[k/5][k%5] = i+'A';
+            k++;
+        }
+    }
+}
+
+void findPosition(char ch,int *row,int *col)
+{
+    if(ch=='J') ch='I';
+
+    for(int i=0;i<5;i++)
+    {
+        for(int j=0;j<5;j++)
+        {
+            if(matrix[i][j]==ch)
+            {
+                *row=i;
+                *col=j;
+            }
+        }
+    }
+}
+
+void prepareText(char plain[], char prepared[])
+{
+    int i,j=0;
+    for(i=0; plain[i]!='\0'; i++)
+    {
+        if(isalpha(plain[i]))
+            prepared[j++]=toupper(plain[i]);
+    }
+    prepared[j]='\0';
+
+    for(i=0;i<j;i+=2)
+    {
+        if(prepared[i]==prepared[i+1])
+        {
+            for(int k=j;k>i+1;k--)
+                prepared[k]=prepared[k-1];
+            prepared[i+1]='X';
+            j++;
+        }
+    }
+
+    if(j%2!=0)
+    {
+        prepared[j++]='X';
+        prepared[j]='\0';
+    }
+}
+
+void encrypt(char prepared[])
+{
+    int i,r1,c1,r2,c2;
+
+    printf("\nCipher Text: ");
+
+    for(i=0; prepared[i]!='\0'; i+=2)
+    {
+        findPosition(prepared[i],&r1,&c1);
+        findPosition(prepared[i+1],&r2,&c2);
+
+        if(r1==r2)
+        {
+            printf("%c%c",
+                matrix[r1][(c1+1)%5],
+                matrix[r2][(c2+1)%5]);
+        }
+        else if(c1==c2)
+        {
+            printf("%c%c",
+                matrix[(r1+1)%5][c1],
+                matrix[(r2+1)%5][c2]);
+        }
+        else
+        {
+            printf("%c%c",
+                matrix[r1][c2],
+                matrix[r2][c1]);
+        }
+    }
+}
+
+int main()
+{
+    char key[50], plain[100], prepared[100];
+
+    printf("Enter key: ");
+    scanf("%s",key);
+
+    printf("Enter plaintext: ");
+    scanf("%s",plain);
+
+    generateMatrix(key);
+
+    prepareText(plain,prepared);
+
+    encrypt(prepared);
+
+    return 0;
+}
+```
 
 
 
 Output:
+<img width="1919" height="1199" alt="image" src="https://github.com/user-attachments/assets/eda77bf2-8ab9-45d4-9189-a56dc40d2bc2" />
+
+
+RESULT:
+               Thus the implementation of Playfair Cipher had been executed successfully.
+
+
