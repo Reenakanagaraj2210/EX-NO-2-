@@ -1,10 +1,6 @@
 ## EX. NO:2 IMPLEMENTATION OF PLAYFAIR CIPHER
 
- 
-
 ## AIM:
- 
-
  
 
 To write a C program to implement the Playfair Substitution technique.
@@ -34,7 +30,7 @@ STEP-5: Display the obtained cipher text.
 
 
 
-Program:
+## Program:
 
 ```
 #include <stdio.h>
@@ -172,11 +168,11 @@ int main()
 
 
 
-Output:
+## Output:
 <img width="1919" height="1199" alt="image" src="https://github.com/user-attachments/assets/eda77bf2-8ab9-45d4-9189-a56dc40d2bc2" />
 
 
-RESULT:
+## RESULT:
                Thus the implementation of Playfair Cipher had been executed successfully.
 
 
